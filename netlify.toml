@@ -5,24 +5,5 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[functions]
-  external_node_modules = ["openai"]
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
-  NODE_VERSION = "16.x"
-
-[dev]
-  command = "npm run dev"
-  port = 8888
-
-[context.production.environment]
-  NODE_VERSION = "16.x"
-
-[context.deploy-preview.environment]
-  NODE_VERSION = "16.x"
