@@ -11,33 +11,33 @@ export default function BestPractices() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-pink-400">How to Use ProteinPirate</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>Be specific about your dietary needs (e.g., "high-protein", "low-carb", "vegan")</li>
+            <li>Be specific about your dietary needs (e.g., &quot;high-protein&quot;, &quot;low-carb&quot;, &quot;vegan&quot;)</li>
             <li>Mention key ingredients you want to use</li>
             <li>Specify the type of meal (e.g., breakfast, snack, dinner)</li>
-            <li>Include any time constraints (e.g., "quick 15-minute meal")</li>
-            <li>Mention cooking method preferences (e.g., "oven-baked", "stovetop")</li>
+            <li>Include any time constraints (e.g., &quot;quick 15-minute meal&quot;)</li>
+            <li>Mention cooking method preferences (e.g., &quot;oven-baked&quot;, &quot;stovetop&quot;)</li>
           </ul>
         </section>
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-pink-400">Example Prompts</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>"Give me a high-protein vegetarian breakfast recipe"</li>
-            <li>"I need a quick 10-minute snack with chocolate and protein"</li>
-            <li>"What's a good low-carb dinner recipe using chicken and vegetables?"</li>
-            <li>"Can you suggest a vegan protein shake recipe?"</li>
-            <li>"I want a hearty soup recipe for cold winter days"</li>
+            <li>&quot;Give me a high-protein vegetarian breakfast recipe&quot;</li>
+            <li>&quot;I need a quick 10-minute snack with chocolate and protein&quot;</li>
+            <li>&quot;What&apos;s a good low-carb dinner recipe using chicken and vegetables?&quot;</li>
+            <li>&quot;Can you suggest a vegan protein shake recipe?&quot;</li>
+            <li>&quot;I want a hearty soup recipe for cold winter days&quot;</li>
           </ul>
         </section>
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-pink-400">Tips for Best Results</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>If you're not satisfied with a recipe, try regenerating it or adjusting your prompt</li>
-            <li>Use the "Remove" feature to exclude ingredients you don't want or don't have</li>
+            <li>If you&apos;re not satisfied with a recipe, try regenerating it or adjusting your prompt</li>
+            <li>Use the &quot;Remove&quot; feature to exclude ingredients you don&apos;t want or don&apos;t have</li>
             <li>Check the nutritional information to ensure it meets your dietary needs</li>
             <li>Feel free to ask for modifications to a generated recipe</li>
-            <li>Save your favorite recipes using the "Copy Recipe" feature</li>
+            <li>Save your favorite recipes using the &quot;Copy Recipe&quot; feature</li>
           </ul>
         </section>
 

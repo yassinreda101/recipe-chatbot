@@ -96,7 +96,7 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
                 name="prompt" 
                 type="text" 
                 className="w-full py-4 px-6 text-lg text-gray-200 bg-gray-800 bg-opacity-50 rounded-full border-2 border-yellow-400 focus:outline-none focus:border-pink-500 transition-all duration-300 ease-in-out" 
-                placeholder="Arr! What recipe ye be seekin', sailor?" 
+                placeholder="Arr! What recipe ye be seekin&apos;, sailor?" 
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
@@ -120,9 +120,9 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
 
           {error && (
             <div className="bg-red-500 bg-opacity-75 text-white p-6 rounded-2xl mb-8 animate-pulse">
-              <p className="font-bold mb-2">Shiver me timbers! We've hit a snag:</p>
+              <p className="font-bold mb-2">Shiver me timbers! We&apos;ve hit a snag:</p>
               <p>{error}</p>
-              <p className="mt-4">Don't worry, matey! Give it another shot or adjust yer course slightly!</p>
+              <p className="mt-4">Don&apos;t worry, matey! Give it another shot or adjust yer course slightly!</p>
             </div>
           )}
 
@@ -165,7 +165,7 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-medium text-pink-400 mb-4">Captain's Orders (Instructions)</h3>
+                  <h3 className="text-xl font-medium text-pink-400 mb-4">Captain&apos;s Orders (Instructions)</h3>
                   <ol className="space-y-4">
                     {recipe.instructions.map((step, index) => (
                       <li key={index} className="bg-gray-700 bg-opacity-50 p-4 rounded-xl">
