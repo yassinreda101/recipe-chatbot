@@ -44,11 +44,6 @@ export default function Layout({ children, title }: LayoutProps) {
                   Best Practices
                 </Link>
               </li>
-              <li>
-                <Link href="/store" className="text-white hover:text-yellow-400 transition-colors duration-300">
-                  E-Cookbook Store
-                </Link>
-              </li>
             </ul>
           </nav>
         </div>
