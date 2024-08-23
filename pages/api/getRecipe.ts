@@ -14,9 +14,31 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
+
   if (req.method === 'POST') {
     try {
       const { prompt } = req.body
+
+      if (!process.env.OPENAI_API_KEY) {
+        throw new Error('OPENAI_API_KEY is not set')
+      }
+
+      if (!ASSISTANT_ID) {
+        throw new Error('OPENAI_ASSISTANT_ID is not set')
+      }
 
       let recipeData: StructuredRecipe | null = null
       let attempts = 0
@@ -42,7 +64,11 @@ export default async function handler(
       }
     } catch (error) {
       console.error('Error:', error)
-      res.status(500).json({ error: 'Failed to generate recipe', details: error instanceof Error ? error.message : String(error) })
+      res.status(500).json({ 
+        error: 'Failed to generate recipe', 
+        details: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      })
     }
   } else {
     res.setHeader('Allow', ['POST'])
