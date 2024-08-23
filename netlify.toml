@@ -15,13 +15,14 @@
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
+  NODE_VERSION = "16.x"
 
 [dev]
   command = "npm run dev"
   port = 8888
 
 [context.production.environment]
-  NODE_VERSION = "18.x"
+  NODE_VERSION = "16.x"
 
 [context.deploy-preview.environment]
-  NODE_VERSION = "18.x"
+  NODE_VERSION = "16.x"
