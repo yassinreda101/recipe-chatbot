@@ -13,3 +13,31 @@ plugins
 functions
 ]
   external_node_modules = ["openai"]
+
+[[
+redirects
+]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[
+build.environment
+]
+  NEXT_USE_NETLIFY_EDGE = "true"
+
+[
+dev
+]
+  command = "npm run dev"
+  port = 8888
+
+[
+context.production
+]
+  environment = { NODE_VERSION = "18.x" }
+
+[
+context.deploy-preview
+]
+  environment = { NODE_VERSION = "18.x" }
