@@ -96,7 +96,7 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
                 name="prompt" 
                 type="text" 
                 className="w-full py-4 px-6 text-lg text-gray-200 bg-gray-800 bg-opacity-50 rounded-full border-2 border-yellow-400 focus:outline-none focus:border-pink-500 transition-all duration-300 ease-in-out" 
-                placeholder="Arr! What recipe ye be seekin&apos;, sailor?" 
+                placeholder="Can I get a chicken burger recipe for 3..." 
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
