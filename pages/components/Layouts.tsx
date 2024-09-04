@@ -44,11 +44,6 @@ export default function Layout({ children, title }: LayoutProps) {
                   Best Practices
                 </Link>
               </li>
-              <li>
-                <Link href="/store" className="text-white hover:text-yellow-400 transition-colors duration-300">
-                  E-Cookbook Store
-                </Link>
-              </li>
             </ul>
           </nav>
         </div>
@@ -59,7 +54,7 @@ export default function Layout({ children, title }: LayoutProps) {
       <footer className="mt-12 text-center">
         <p className="text-yellow-200 mb-4">Crafted with ❤️ using Next.js, React Query, and OpenAI</p>
         <a 
-          href="https://github.com/yourusername/proteinpirate" 
+          href="https://github.com/yassinreda101/recipe-chatbot" 
           target="_blank" 
           rel="noopener noreferrer" 
           className="inline-block px-6 py-3 bg-gradient-to-r from-yellow-400 to-pink-500 text-gray-900 font-bold rounded-full hover:from-yellow-500 hover:to-pink-600 transition-all duration-300 ease-in-out transform hover:scale-105"

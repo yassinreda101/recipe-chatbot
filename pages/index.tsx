@@ -8,7 +8,6 @@ export default function Home() {
   const [prompt, setPrompt] = useState('')
   const [recipe, setRecipe] = useState<StructuredRecipe | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [generationStatus, setGenerationStatus] = useState<string | null>(null)
   const [availableIngredients, setAvailableIngredients] = useState<Array<{name: string, amount: string}>>([])
 
   const mutation = useMutation({
@@ -18,53 +17,30 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(input),
       })
-
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to get recipe')
       }
-
-      const reader = response.body!.getReader()
-      const decoder = new TextDecoder()
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        const chunk = decoder.decode(value)
-        const lines = chunk.split('\n\n')
-        
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = JSON.parse(line.slice(6))
-            if (data.status === 'generating') {
-              setGenerationStatus(data.progress || 'Generating recipe...')
-            } else if (data.status === 'complete') {
-              return data.recipe
-            } else if (data.status === 'error') {
-              throw new Error(data.message)
-            }
-          }
-        }
-      }
+      const data = await response.json()
+      console.log('API response:', data)
+      return data as StructuredRecipe
     },
     onSuccess: (data: StructuredRecipe) => {
+      console.log('onSuccess called with data:', data)
       setRecipe(data)
       setAvailableIngredients(data.ingredients)
       setError(null)
-      setGenerationStatus(null)
     },
     onError: (error: Error) => {
       console.error('Error in mutation:', error)
       setError(error.message)
       setRecipe(null)
-      setGenerationStatus(null)
     },
   })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    setGenerationStatus('Starting recipe generation...')
     mutation.mutate({ prompt })
   }
 
@@ -75,7 +51,6 @@ export default function Home() {
   const handleRegenerateRecipe = () => {
     if (recipe) {
       const updatedPrompt = `Create a recipe with these ingredients: ${availableIngredients.map(ing => `${ing.amount} ${ing.name}`).join(', ')}`
-      setGenerationStatus('Regenerating recipe...')
       mutation.mutate({ prompt: updatedPrompt })
     }
   }
@@ -121,7 +96,7 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
                 name="prompt" 
                 type="text" 
                 className="w-full py-4 px-6 text-lg text-gray-200 bg-gray-800 bg-opacity-50 rounded-full border-2 border-yellow-400 focus:outline-none focus:border-pink-500 transition-all duration-300 ease-in-out" 
-                placeholder="Arr! What recipe ye be seekin', sailor?" 
+                placeholder="Can I get a chicken burger recipe for 3..." 
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
@@ -143,17 +118,11 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
             </p>
           </form>
 
-          {generationStatus && (
-            <div className="bg-blue-500 bg-opacity-75 text-white p-4 rounded-xl mb-8 animate-pulse">
-              <p>{generationStatus}</p>
-            </div>
-          )}
-
           {error && (
             <div className="bg-red-500 bg-opacity-75 text-white p-6 rounded-2xl mb-8 animate-pulse">
-              <p className="font-bold mb-2">Shiver me timbers! We've hit a snag:</p>
+              <p className="font-bold mb-2">Shiver me timbers! We&apos;ve hit a snag:</p>
               <p>{error}</p>
-              <p className="mt-4">Don't worry, matey! Give it another shot or adjust yer course slightly!</p>
+              <p className="mt-4">Don&apos;t worry, matey! Give it another shot or adjust yer course slightly!</p>
             </div>
           )}
 
@@ -196,7 +165,7 @@ Fat: ${Math.round(recipe.nutritionalInfo.fat / recipe.servings)}g
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-medium text-pink-400 mb-4">Captain's Orders (Instructions)</h3>
+                  <h3 className="text-xl font-medium text-pink-400 mb-4">Captain&apos;s Orders (Instructions)</h3>
                   <ol className="space-y-4">
                     {recipe.instructions.map((step, index) => (
                       <li key={index} className="bg-gray-700 bg-opacity-50 p-4 rounded-xl">
