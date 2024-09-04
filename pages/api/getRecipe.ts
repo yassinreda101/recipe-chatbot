@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import OpenAI from 'openai'
 import { StructuredRecipe } from '../../types'
+import NodeCache from 'node-cache'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -9,35 +10,24 @@ const openai = new OpenAI({
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
 
 const MAX_RETRIES = 3
+const CACHE_TTL = 3600 // Cache time-to-live in seconds (1 hour)
+
+// Initialize cache
+const cache = new NodeCache({ stdTTL: CACHE_TTL })
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Add CORS headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
-  }
-
   if (req.method === 'POST') {
     try {
       const { prompt } = req.body
 
-      if (!process.env.OPENAI_API_KEY) {
-        throw new Error('OPENAI_API_KEY is not set')
-      }
-
-      if (!ASSISTANT_ID) {
-        throw new Error('OPENAI_ASSISTANT_ID is not set')
+      // Check cache first
+      const cachedRecipe = cache.get<StructuredRecipe>(prompt)
+      if (cachedRecipe) {
+        console.log('Returning cached recipe')
+        return res.status(200).json(cachedRecipe)
       }
 
       let recipeData: StructuredRecipe | null = null
@@ -58,17 +48,15 @@ export default async function handler(
       }
 
       if (recipeData) {
+        // Cache the successful result
+        cache.set(prompt, recipeData)
         res.status(200).json(recipeData)
       } else {
         throw new Error('Failed to generate a valid recipe after multiple attempts')
       }
     } catch (error) {
       console.error('Error:', error)
-      res.status(500).json({ 
-        error: 'Failed to generate recipe', 
-        details: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
-      })
+      res.status(500).json({ error: 'Failed to generate recipe', details: error instanceof Error ? error.message : String(error) })
     }
   } else {
     res.setHeader('Allow', ['POST'])
@@ -124,9 +112,14 @@ Important notes:
   })
 
   let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id)
+  
+  // Implement exponential backoff for polling
+  let delay = 1000 // Start with 1 second delay
+  const maxDelay = 8000 // Max delay of 8 seconds
   while (runStatus.status !== 'completed') {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, delay))
     runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id)
+    delay = Math.min(delay * 2, maxDelay) // Exponential backoff with max delay
   }
 
   const messages = await openai.beta.threads.messages.list(thread.id)
